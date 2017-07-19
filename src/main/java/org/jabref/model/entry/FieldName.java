@@ -31,6 +31,7 @@ public class FieldName {
     public static final String ANNOTATOR = "annotator";
     public static final String ASSIGNEE = "assignee";
     public static final String AUTHOR = "author";
+    public static final String BIBKEY = "bibtexkey";
     public static final String BOOKAUTHOR = "bookauthor";
     public static final String BOOKPAGINATION = "bookpagination";
     public static final String BOOKSUBTITLE = "booksubtitle";

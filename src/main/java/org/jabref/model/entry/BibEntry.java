@@ -405,9 +405,51 @@ public class BibEntry implements Cloneable {
             return clearField(fieldName);
         }
 
+
         String oldValue = getField(fieldName).orElse(null);
         if (value.equals(oldValue)) {
             return Optional.empty();
+        }
+
+        //Ano tem que ser conforme o ano gregoriano do calendario Java
+        String novovalor = "1970";
+        // se o nome do campo de completar e o de ano e se o valor e menor do que 1582 (Data de inicio do calendario Gregoriano)
+        if (name.equals(FieldName.YEAR) && (Integer.parseInt(value) < 1592)) {
+            //poe valor no campo internamente
+            fields.put(fieldName, novovalor.intern());
+            //limpa valor anterior
+            invalidateFieldCache(fieldName);
+            //define mudanca do campo
+            FieldChange change = new FieldChange(this, fieldName, oldValue, novovalor);
+            //coloca no "barramento" de mudanca
+            eventBus.post(new FieldChangedEvent(change, eventSource));
+            //retorna mudanca
+            return Optional.of(change);
+        }
+        //fim da modificacao de especificacao do ano
+
+        char c = value.charAt(0);
+        //BibtextKey deve ter comprimento maior do que dois e o primeiro uma letra maiuscula ou minuscula
+        if (((name.equals(FieldName.BIBKEY)) && !Character.isLetter(c)) || (Character.isLetter(c) && (value.length() <= 2))) {
+            //valor default para o novo valor da chave
+            novovalor = "DefaultKey";
+            //tenta trocar esse valor por nome do autor + ano, se existirem
+            try {
+                novovalor = getField(FieldName.AUTHOR).get() + getField(FieldName.YEAR).get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //poe valor no campo internamente
+            fields.put(fieldName, novovalor.intern());
+            //limpa valor anterior
+            invalidateFieldCache(fieldName);
+            //define mudanca do campo
+            FieldChange change = new FieldChange(this, fieldName, oldValue, novovalor);
+            //coloca no "barramento" de mudanca
+            eventBus.post(new FieldChangedEvent(change, eventSource));
+            //retorna mudanca
+            return Optional.of(change);
         }
 
         if (BibEntry.ID_FIELD.equals(fieldName)) {
