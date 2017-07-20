@@ -405,7 +405,6 @@ public class BibEntry implements Cloneable {
             return clearField(fieldName);
         }
 
-
         String oldValue = getField(fieldName).orElse(null);
         if (value.equals(oldValue)) {
             return Optional.empty();
