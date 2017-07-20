@@ -56,6 +56,10 @@ public class ExportFormats {
         ExportFormats.putFormat(
                 new ExportFormat("MIS Quarterly", "misq", "misq", "misq", ".rtf", layoutPreferences, savePreferences));
 
+        // apos adicionar os arquivos de layout do ABNT coloca-se esta linha para ele reconhecer internamente que existe uma nova opcao
+        ExportFormats
+                .putFormat(new ExportFormat("ABNT", "ABNT", "newfilter", "abnt", ".html", layoutPreferences, savePreferences));
+
         ExportFormats.putFormat(new BibTeXMLExportFormat());
         ExportFormats.putFormat(new OpenOfficeDocumentCreator());
         ExportFormats.putFormat(new OpenDocumentSpreadsheetCreator());
