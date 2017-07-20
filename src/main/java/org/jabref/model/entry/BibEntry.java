@@ -429,7 +429,7 @@ public class BibEntry implements Cloneable {
 
         char c = value.charAt(0);
         //BibtextKey deve ter comprimento maior do que dois e o primeiro uma letra maiuscula ou minuscula
-        if (((name.equals(FieldName.BIBKEY)) && !Character.isLetter(c)) || (Character.isLetter(c) && (value.length() <= 2))) {
+        if (name.equals(FieldName.BIBTEXKEY) && ((!Character.isLetter(c)) || (Character.isLetter(c) && (value.length() <= 2)))) {
             //valor default para o novo valor da chave
             novovalor = "DefaultKey";
             //tenta trocar esse valor por nome do autor + ano, se existirem
