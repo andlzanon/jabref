@@ -413,17 +413,25 @@ public class BibEntry implements Cloneable {
         //Ano tem que ser conforme o ano gregoriano do calendario Java
         String novovalor = "1970";
         // se o nome do campo de completar e o de ano e se o valor e menor do que 1582 (Data de inicio do calendario Gregoriano)
-        if (name.equals(FieldName.YEAR) && (Integer.parseInt(value) < 1592)) {
-            //poe valor no campo internamente
-            fields.put(fieldName, novovalor.intern());
-            //limpa valor anterior
-            invalidateFieldCache(fieldName);
-            //define mudanca do campo
-            FieldChange change = new FieldChange(this, fieldName, oldValue, novovalor);
-            //coloca no "barramento" de mudanca
-            eventBus.post(new FieldChangedEvent(change, eventSource));
-            //retorna mudanca
-            return Optional.of(change);
+        if (name.equals(FieldName.YEAR)) {
+            int ano;
+            try {
+                ano = Integer.parseInt(value);
+                if (ano < 1592) {
+                    //poe valor no campo internamente
+                    fields.put(fieldName, novovalor.intern());
+                    //limpa valor anterior
+                    invalidateFieldCache(fieldName);
+                    //define mudanca do campo
+                    FieldChange change = new FieldChange(this, fieldName, oldValue, novovalor);
+                    //coloca no "barramento" de mudanca
+                    eventBus.post(new FieldChangedEvent(change, eventSource));
+                    //retorna mudanca
+                    return Optional.of(change);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         //fim da modificacao de especificacao do ano
 
