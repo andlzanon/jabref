@@ -154,6 +154,23 @@ public class TestBook {
         assertEquals(Collections.singletonList(insercao), teste);
     }
 
+    // Teste para verificar bibtexkey valida de um book
+    // Para ser valida a bibtexkey deve ter comprimento superior a dois caracteres e começar com uma letra
+    // Bibtexkey comecando com letra maiuscula
+    @Test
+    public void bookComValidaBibTexKey2() throws ParseException {
+        // Entrada esperada de um book com bibtexkey = Aa2
+        List<BibEntry> teste = parser.parseEntries("@book{Aa2}");
+
+        // Instancia uma nova entrada a ser inserida e comparada com a esperada
+        BibEntry insercao = new BibEntry();
+
+        // Entrada inserida do tipo book e com campo bibtexkey = Aa2
+        insercao.setType("book");
+        insercao.setField("bibtexkey", "Aa2");
+        assertEquals(Collections.singletonList(insercao), teste);
+    }
+
     // Teste para verificar ano invalido de um book
     // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
     @Test
@@ -170,10 +187,43 @@ public class TestBook {
         assertEquals(Collections.singletonList(insercao), teste);
     }
 
-    // Teste para verificar ano valido de um book
+    // Teste para verificar ano invalido de um book
+    // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
+    // Testes com dois numeros invalidos diferentes deve produzir o mesmo resultado
+    @Test
+    public void bookComAnoInvalido2() throws ParseException {
+        // Entrada esperada de um book com ano = 1591
+        List<BibEntry> teste = parser.parseEntries("@book{, year = {1500}}");
+
+        // Instancia uma nova entrada a ser inserida e comparada com a esperada
+        BibEntry insercao = new BibEntry();
+
+        // Entrada inserida do tipo book e com campo ano = 1591
+        insercao.setType("book");
+        insercao.setField("year", "1531");
+        assertEquals(Collections.singletonList(insercao), teste);
+    }
+
+    // Teste para verificar ano invalido de um book
     // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
     @Test
     public void bookComAnoValido() throws ParseException {
+        // Entrada esperada de um book com ano = 1592
+        List<BibEntry> teste = parser.parseEntries("@book{, year = {1592}}");
+
+        // Instancia uma nova entrada a ser inserida e comparada com a esperada
+        BibEntry insercao = new BibEntry();
+
+        // Entrada inserida do tipo book e com campo ano = 1591
+        insercao.setType("book");
+        insercao.setField("year", "1592");
+        assertEquals(Collections.singletonList(insercao), teste);
+    }
+
+    // Teste para verificar ano valido de um book
+    // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
+    @Test
+    public void bookComAnoValido2() throws ParseException {
         // Entrada esperada de um book com ano = 1910
         List<BibEntry> teste = parser.parseEntries("@book{, year = {1910}}");
 
@@ -196,6 +246,7 @@ public class TestBook {
 
         // Insere autor com campo null na entrada a ser comparada
         insercao.setField("author", null);
+
         fail();
     }
 
@@ -210,14 +261,25 @@ public class TestBook {
         fail();
     }
 
-    // Teste com entrada do campo journal null
+    // Teste com entrada do campo publisher null
     @Test(expected = NullPointerException.class)
-    public void bookComJournalNull() {
+    public void bookComPublisherNull() {
         // Instancia uma nova entrada a ser inserida e comparada com a esperada
         BibEntry insercao = new BibEntry("book");
 
         // Insere titulo com campo null na entrada a ser comparada
-        insercao.setField("journal", null);
+        insercao.setField("publisher", null);
+        fail();
+    }
+
+    // Teste com entrada do campo editor null
+    @Test(expected = NullPointerException.class)
+    public void bookComEditorNull() {
+        // Instancia uma nova entrada a ser inserida e comparada com a esperada
+        BibEntry insercao = new BibEntry("book");
+
+        // Insere titulo com campo null na entrada a ser comparada
+        insercao.setField("editor", null);
         fail();
     }
 

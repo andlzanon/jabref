@@ -150,6 +150,23 @@ public class TestArticle {
         assertEquals(Collections.singletonList(insercao), teste);
     }
 
+    // Teste para verificar bibtexkey valida de um artigo
+    // Para ser valida a bibtexkey deve ter comprimento superior a dois caracteres e começar com uma letra
+    // Comecando com maiuscula
+    @Test
+    public void artigoComValidaBibTexKey2() throws ParseException {
+        // Entrada esperada de um artigo com bibtexkey = Aa2
+        List<BibEntry> teste = parser.parseEntries("@article{Aa2}");
+
+        // Instancia uma nova entrada a ser inserida e comparada com a esperada
+        BibEntry insercao = new BibEntry();
+
+        // Entrada inserida do tipo artigo e com campo bibtexkey = Aa2
+        insercao.setType("article");
+        insercao.setField("bibtexkey", "Aa2");
+        assertEquals(Collections.singletonList(insercao), teste);
+    }
+
     // Teste para verificar ano invalido de um artigo
     // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
     @Test
@@ -166,10 +183,43 @@ public class TestArticle {
         assertEquals(Collections.singletonList(insercao), teste);
     }
 
+    // Teste para verificar ano invalido de um artigo
+    // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
+    // Testes com dois numeros invalidos diferentes deve produzir o mesmo resultado
+    @Test
+    public void artigoComAnoInvalido2() throws ParseException {
+        // Entrada esperada de um artigo com ano = 1591
+        List<BibEntry> teste = parser.parseEntries("@article{, year = {1591}}");
+
+        // Instancia uma nova entrada a ser inserida e comparada com a esperada
+        BibEntry insercao = new BibEntry();
+
+        // Entrada inserida do tipo artigo e com campo ano = 533
+        insercao.setType("article");
+        insercao.setField("year", "533");
+        assertEquals(Collections.singletonList(insercao), teste);
+    }
+
     // Teste para verificar ano valido de um artigo
     // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
     @Test
     public void artigoComAnoValido() throws ParseException {
+        // Entrada esperada de um artigo com ano = 1592
+        List<BibEntry> teste = parser.parseEntries("@article{, year = {1592}}");
+
+        // Instancia uma nova entrada a ser inserida e comparada com a esperada
+        BibEntry insercao = new BibEntry();
+
+        // Entrada inserida do tipo artigo e com campo ano = 1592
+        insercao.setType("article");
+        insercao.setField("year", "1592");
+        assertEquals(Collections.singletonList(insercao), teste);
+    }
+
+    // Teste para verificar ano valido de um artigo
+    // Para ser valido conforme o calendario gregoriano o ano deve ser maior ou igual a 1592
+    @Test
+    public void artigoComAnoValido2() throws ParseException {
         // Entrada esperada de um artigo com ano = 1910
         List<BibEntry> teste = parser.parseEntries("@article{, year = {1910}}");
 
@@ -181,6 +231,7 @@ public class TestArticle {
         insercao.setField("year", "1910");
         assertEquals(Collections.singletonList(insercao), teste);
     }
+
 
     // Testes para o Null Pointer Exception
     // Os testes devem falhar pois apontam para um endereço inexistente
