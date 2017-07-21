@@ -165,7 +165,8 @@ public class ImportInspectionDialog extends JabRefDialog implements ImportInspec
     private final List<BibEntry> entriesToDelete = new ArrayList<>();
     private final String undoName;
     private final List<CallBack> callBacks = new ArrayList<>();
-    private final boolean newDatabase;
+    private boolean newDatabase; //Retirada a restricao 'final' para que a variavel possa ser alterada,
+                                 //caso o usuario queira criar uma nova base ao importar entradas duplicadas
     private final JPopupMenu popup = new JPopupMenu();
     private final JButton deselectAllDuplicates = new JButton(Localization.lang("Deselect all duplicates"));
     private final JButton stop = new JButton(Localization.lang("Stop"));
@@ -736,13 +737,23 @@ public class ImportInspectionDialog extends JabRefDialog implements ImportInspec
                                 Localization
                                         .lang("There are possible duplicates (marked with an icon) that haven't been resolved. Continue?"),
                                 Localization.lang("Disable this confirmation dialog"), false);
-                        int answer = JOptionPane.showConfirmDialog(ImportInspectionDialog.this, cbm,
-                                Localization.lang("Duplicates found"), JOptionPane.YES_NO_OPTION);
+                        //Adiciona botao "Create New Database"
+                        //Objeto com o titulo dos botoes
+                        Object[] newOption = {"Yes", "No", "Create New Database"};
+
+                        //Utilizando showOptionDialog para aceitar botoes personalizados
+                        int answer = JOptionPane.showOptionDialog(ImportInspectionDialog.this, cbm,
+                                Localization.lang("Duplicates found"), JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, null, newOption, newOption[0]);
                         if (cbm.isSelected()) {
                             Globals.prefs.putBoolean(JabRefPreferences.WARN_ABOUT_DUPLICATES_IN_INSPECTION, false);
                         }
                         if (answer == JOptionPane.NO_OPTION) {
                             return;
+                        }
+                        //Se a opcao selecionada foi "Create new database" (=CANCEL)
+                        if (answer == JOptionPane.CANCEL_OPTION) {
+                            newDatabase = true;
                         }
                         break;
                     }
